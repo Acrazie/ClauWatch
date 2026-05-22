@@ -22,8 +22,11 @@ class MenubarController {
     private func setupStatusItem() {
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
         guard let button = statusItem.button else { return }
-        button.image = NSImage(systemSymbolName: "timer",
-                               accessibilityDescription: "ClauWatch")
+        if let url = Bundle.module.url(forResource: "product_logo", withExtension: "svg"),
+           let logo = NSImage(contentsOf: url) {
+            logo.size = NSSize(width: 18, height: 18)
+            button.image = logo
+        }
         button.imagePosition = .imageLeft
         button.action = #selector(togglePopover)
         button.target = self

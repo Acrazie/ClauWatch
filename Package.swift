@@ -21,7 +21,8 @@ let package = Package(
             path: "Sources/ClauWatch",
             exclude: ["Resources/Info.plist"],
             resources: [
-                .process("Resources/Fonts")
+                .process("Resources/Fonts"),
+                .process("Resources/product_logo.svg")
             ]
         ),
         .testTarget(

@@ -16,6 +16,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         if let url = Bundle.module.url(forResource: "PerpetuaMTRegular", withExtension: "ttf") {
             CTFontManagerRegisterFontsForURL(url as CFURL, .process, nil)
         }
+        if let url = Bundle.module.url(forResource: "product_logo", withExtension: "svg"),
+           let icon = NSImage(contentsOf: url) {
+            NSApplication.shared.applicationIconImage = icon
+        }
 
         let now = Int64(Date().timeIntervalSince1970)
         try? store.closeStaleSessions(before: now - 600, endedAtTime: now)
