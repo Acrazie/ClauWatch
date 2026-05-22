@@ -9,17 +9,29 @@ public struct SessionStats {
     public let monthDuration: Int
     public let projectsThisWeek: [ProjectStat]
     public let activeSession: ActiveSession?
+    public init(todayDuration: Int, weekDuration: Int, monthDuration: Int,
+                projectsThisWeek: [ProjectStat], activeSession: ActiveSession?) {
+        self.todayDuration = todayDuration; self.weekDuration = weekDuration
+        self.monthDuration = monthDuration; self.projectsThisWeek = projectsThisWeek
+        self.activeSession = activeSession
+    }
 }
 
 public struct ProjectStat {
     public let name: String
     public let path: String
     public let duration: Int
+    public init(name: String, path: String, duration: Int) {
+        self.name = name; self.path = path; self.duration = duration
+    }
 }
 
 public struct ActiveSession {
     public let projectName: String
     public let startedAt: Date
+    public init(projectName: String, startedAt: Date) {
+        self.projectName = projectName; self.startedAt = startedAt
+    }
 }
 
 // MARK: - Column definitions
