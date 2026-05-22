@@ -2,6 +2,11 @@
   "name": "clauwatch-hooks",
   "version": "1.0.0",
   "scripts": {
-    "test": "bun test hooks/"
+    "test": "bun test hooks/",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "bun-types": "latest",
+    "typescript": "latest"
   }
 }
