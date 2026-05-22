@@ -16,10 +16,12 @@ jobs:
       - uses: actions/checkout@v4
       - name: Swift version
         run: swift --version
-      - name: Build
+      - name: Build (debug)
         run: swift build
+      - name: Build (release)
+        run: swift build -c release
       - name: Test
-        run: swift test
+        run: swift test --parallel
 
   bun:
     name: Bun Tests

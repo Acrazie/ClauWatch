@@ -36,3 +36,13 @@ test("openDb creates directory if missing", () => {
   const db = openDb();
   db.close();
 });
+
+test("sessions table has all expected columns", () => {
+  const db = openDb();
+  const cols = db.query("PRAGMA table_info(sessions)").all() as { name: string }[];
+  const names = cols.map((c) => c.name);
+  for (const col of ["id", "project_path", "project_name", "started_at", "ended_at", "last_seen_at", "duration"]) {
+    expect(names).toContain(col);
+  }
+  db.close();
+});
