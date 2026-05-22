@@ -65,4 +65,21 @@ import Foundation
         #expect(s.projectsThisWeek.map(\.name).contains("alpha"))
         #expect(s.projectsThisWeek.map(\.name).contains("beta"))
     }
+
+    @Test func closeStaleSessionsSparesFreshOnes() throws {
+        let now = Int64(Date().timeIntervalSince1970)
+        try store.insertTestSession(path: "/stale", name: "stale",
+            startedAt: now - 3600, endedAt: nil, duration: nil)
+        try store.db.execute(
+            "UPDATE sessions SET last_seen_at = \(now - 1200) WHERE project_path = '/stale'")
+        try store.insertTestSession(path: "/fresh", name: "fresh",
+            startedAt: now - 120, endedAt: nil, duration: nil)
+        try store.db.execute(
+            "UPDATE sessions SET last_seen_at = \(now - 120) WHERE project_path = '/fresh'")
+
+        try store.closeStaleSessions(before: now - 600, endedAtTime: now)
+
+        let s = try store.stats()
+        #expect(s.activeSession?.projectName == "fresh")
+    }
 }
