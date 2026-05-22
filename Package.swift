@@ -19,6 +19,7 @@ let package = Package(
             name: "ClauWatch",
             dependencies: ["ClauWatchCore"],
             path: "Sources/ClauWatch",
+            exclude: ["Resources/Info.plist"],
             resources: [
                 .process("Resources/Fonts")
             ]
