@@ -1,0 +1,29 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+jobs:
+  build-release:
+    name: Build and publish release
+    runs-on: macos-15
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/cache@v4
+        with:
+          path: .build
+          key: spm-release-${{ hashFiles('Package.resolved') }}
+          restore-keys: spm-release-
+      - name: Build release binary
+        run: swift build -c release
+      - name: Strip binary
+        run: strip .build/release/ClauWatch
+      - name: Zip binary
+        run: zip -j ClauWatch-${{ github.ref_name }}-macos.zip .build/release/ClauWatch
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: ClauWatch-${{ github.ref_name }}-macos.zip
+          generate_release_notes: true

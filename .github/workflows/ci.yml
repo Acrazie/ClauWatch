@@ -6,32 +6,46 @@ on:
   pull_request:
 
 jobs:
-  swift:
+  swift-test:
     name: Swift Tests (macOS ${{ matrix.os }})
     runs-on: macos-${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
         os: [14, 15]
     steps:
       - uses: actions/checkout@v4
-      - name: Swift version
-        run: swift --version
-      - name: Build (debug)
-        run: swift build
-      - name: Build (release)
-        run: swift build -c release
-      - name: Test
-        run: swift test --parallel
+      - uses: actions/cache@v4
+        with:
+          path: .build
+          key: spm-${{ matrix.os }}-${{ hashFiles('Package.resolved') }}
+          restore-keys: spm-${{ matrix.os }}-
+      - run: swift build
+      - run: swift test --parallel
+
+  swift-release:
+    name: Swift Release Build (macOS 15)
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/cache@v4
+        with:
+          path: .build
+          key: spm-release-${{ hashFiles('Package.resolved') }}
+          restore-keys: spm-release-
+      - run: swift build -c release
 
   bun:
-    name: Bun Tests
+    name: Bun Tests (macOS 15)
     runs-on: macos-15
     steps:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v2
         with:
           bun-version: latest
-      - name: Install dependencies
-        run: bun install
-      - name: Test
-        run: bun test hooks/
+      - uses: actions/cache@v4
+        with:
+          path: ~/.bun/install/cache
+          key: bun-${{ hashFiles('package.json') }}
+          restore-keys: bun-
+      - run: bun test hooks/
