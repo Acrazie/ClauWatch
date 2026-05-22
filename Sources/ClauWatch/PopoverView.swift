@@ -38,7 +38,7 @@ struct PopoverView: View {
                 .font(.system(size: 13))
                 .foregroundColor(Color(hex: 0x6B7280))
             Text("ClauWatch")
-                .font(.custom("PerpetuaMTPro-Regular", size: 14))
+                .font(.custom("PerpetuaMT", size: 14))
                 .kerning(1.8)
                 .foregroundColor(Color(hex: 0xF0F0F5))
             Spacer()
@@ -110,7 +110,7 @@ struct PopoverView: View {
                     .foregroundColor(Color(hex: 0x6B7280))
             }
             Text(hm(value))
-                .font(.custom("PerpetuaMTPro-Regular", size: 17))
+                .font(.custom("PerpetuaMT", size: 17))
                 .kerning(2.0)
                 .foregroundColor(accent ? Color(hex: 0x34C759) : Color(hex: 0xF0F0F5))
                 .lineLimit(1).minimumScaleFactor(0.7)

@@ -1,4 +1,5 @@
 import AppKit
+import CoreText
 import ClauWatchCore
 
 class AppDelegate: NSObject, NSApplicationDelegate {
@@ -12,6 +13,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func applicationDidFinishLaunching(_ notification: Notification) {
+        if let url = Bundle.module.url(forResource: "PerpetuaMTRegular", withExtension: "ttf") {
+            CTFontManagerRegisterFontsForURL(url as CFURL, .process, nil)
+        }
+
         let now = Int64(Date().timeIntervalSince1970)
         try? store.closeStaleSessions(before: now - 600, endedAtTime: now)
 
