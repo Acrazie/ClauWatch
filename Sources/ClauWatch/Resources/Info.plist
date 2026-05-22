@@ -3,8 +3,14 @@
   "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <key>LSUIElement</key><true/>
-    <key>CFBundleName</key><string>ClauWatch</string>
+    <key>CFBundleExecutable</key><string>ClauWatch</string>
     <key>CFBundleIdentifier</key><string>com.clauwatch.app</string>
+    <key>CFBundleName</key><string>ClauWatch</string>
+    <key>CFBundlePackageType</key><string>APPL</string>
+    <key>CFBundleShortVersionString</key><string>0.1</string>
+    <key>CFBundleVersion</key><string>1</string>
+    <key>LSUIElement</key><true/>
+    <key>NSHighResolutionCapable</key><true/>
+    <key>NSPrincipalClass</key><string>NSApplication</string>
 </dict>
 </plist>

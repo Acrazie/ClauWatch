@@ -12,18 +12,44 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/cache@v4
         with:
           path: .build
           key: spm-release-${{ hashFiles('Package.resolved') }}
           restore-keys: spm-release-
+
       - name: Build release binary
         run: swift build -c release
-      - name: Strip binary
-        run: strip .build/release/ClauWatch
-      - name: Zip binary
-        run: zip -j ClauWatch-${{ github.ref_name }}-macos.zip .build/release/ClauWatch
+
+      - name: Assemble .app bundle
+        run: |
+          APP="ClauWatch.app"
+          mkdir -p "$APP/Contents/MacOS"
+          cp .build/release/ClauWatch "$APP/Contents/MacOS/"
+          if [ -d ".build/release/ClauWatch_ClauWatch.bundle" ]; then
+            cp -r .build/release/ClauWatch_ClauWatch.bundle "$APP/Contents/MacOS/"
+          fi
+          # Inject tag version into Info.plist
+          cp Sources/ClauWatch/Resources/Info.plist "$APP/Contents/Info.plist"
+          VERSION="${{ github.ref_name }}"
+          VERSION="${VERSION#v}"
+          /usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString $VERSION" "$APP/Contents/Info.plist"
+          strip "$APP/Contents/MacOS/ClauWatch"
+
+      - name: Create DMG
+        run: |
+          mkdir dmg-src
+          cp -r ClauWatch.app dmg-src/
+          ln -s /Applications dmg-src/Applications
+          hdiutil create \
+            -volname "ClauWatch" \
+            -srcfolder dmg-src \
+            -ov \
+            -format UDZO \
+            "ClauWatch-${{ github.ref_name }}.dmg"
+
       - uses: softprops/action-gh-release@v2
         with:
-          files: ClauWatch-${{ github.ref_name }}-macos.zip
+          files: ClauWatch-${{ github.ref_name }}.dmg
           generate_release_notes: true
